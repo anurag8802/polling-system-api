@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Real-time Poll</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h2>Vote for your favorite option!</h2>
+  <button onclick="vote('optionA')">Option A</button>
+  <button onclick="vote('optionB')">Option B</button>
+
+  <h3>Live Results:</h3>
+  <p>Option A: <span id="aCount">0</span></p>
+  <p>Option B: <span id="bCount">0</span></p>
+
+  <script>
+    const socket = io();
+
+    // Listen for real-time updates
+    socket.on("updateVotes", (data) => {
+      document.getElementById("aCount").innerText = data.optionA;
+      document.getElementById("bCount").innerText = data.optionB;
+    });
+
+    // Emit a vote event
+    function vote(option) {
+      socket.emit("vote", option);
+    }
+  </script>
+</body>
+</html>
